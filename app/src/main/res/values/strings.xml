@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">MyOwnVideoCall</string>
+    <string name="agora_app_id">40d42e285267418394dc159415cfc050</string>
+    <string name="fire">Confirm</string>
+    <string name="cancel">Cancel</string>
+    <string name="agora_access_token">00640d42e285267418394dc159415cfc050IAADbj/fjPhp2xJbR7gFgcr4/DTRKGRPwH+soi2phrdNsnejk78AAAAAEACX4x4ZLwGkXgEAAQAUAaRe</string>
+</resources>

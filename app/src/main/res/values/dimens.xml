@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="fivedp">5dp</dimen>
+    <dimen name="tendp">10dp</dimen>
+    <dimen name="sixteendp">16dp</dimen>
+    <dimen name="twentyfourdp">24dp</dimen>
+    <dimen name="thirtydp">30dp</dimen>
+    <dimen name="fiftydp">50dp</dimen>
+    <dimen name="sixtydpe">60dp</dimen>
+    <dimen name="eightydp">80dp</dimen>
+    <dimen name="hundresdp">100dp</dimen>
+    <dimen name="threehundresdp">300dp</dimen>
+    <dimen name="fivehundreddp">500dp</dimen>
+    <dimen name="activity_horizontal_margin">18dp</dimen>
+    <dimen name="activity_vertical_margin">18dp</dimen>
+
+
+
+</resources>

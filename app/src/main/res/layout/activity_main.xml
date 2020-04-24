@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_video_chat_view"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <RelativeLayout
+        android:id="@+id/rel_sub_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="@dimen/tendp"
+        android:background="@color/largewindow">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/hundresdp"
+            android:layout_alignParentBottom="true"/>
+
+        <FrameLayout
+            android:id="@+id/rel_pub_container"
+            android:layout_width="@dimen/eightydp"
+            android:layout_height="@dimen/hundresdp"
+            android:layout_marginTop="@dimen/fivehundreddp"
+            android:layout_marginEnd="@dimen/threehundresdp"
+            android:layout_marginLeft="@dimen/threehundresdp"
+            android:background="@color/smallwindow">
+
+        </FrameLayout>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/twentyfourdp">
+
+        <ImageView
+            android:id="@+id/img_call"
+            android:layout_width="@dimen/fiftydp"
+            android:layout_height="@dimen/fiftydp"
+            android:layout_centerInParent="true"
+            android:onClick="onCallClicked"
+            android:src="@drawable/ic_call_end_black_24dp"
+            android:scaleType="centerCrop"/>
+
+        <ImageView
+            android:id="@+id/img_cam"
+            android:onClick="onClickCamera"
+            android:layout_width="@dimen/fiftydp"
+            android:layout_height="@dimen/fiftydp"
+            android:layout_toRightOf="@id/img_call"
+            android:layout_toEndOf="@id/img_call"
+            android:layout_marginLeft="@dimen/fiftydp"
+            android:layout_centerVertical="true"
+
+            android:src="@drawable/ic_camera_enhance_black_24dp"
+          />
+
+        <ImageView
+            android:id="@+id/img_mute"
+            android:onClick="onClickMute"
+            android:layout_width="@dimen/fiftydp"
+            android:layout_height="@dimen/fiftydp"
+            android:layout_toLeftOf="@id/img_call"
+            android:layout_toStartOf="@id/img_call"
+            android:layout_marginRight="@dimen/fiftydp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_mic_black_24dp"
+           />
+    </RelativeLayout>
+
+</RelativeLayout>
