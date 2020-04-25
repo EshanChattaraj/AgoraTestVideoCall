@@ -1,7 +1,7 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_video_chat_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
@@ -13,23 +13,29 @@
         android:layout_margin="@dimen/tendp"
         android:background="@color/largewindow">
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/hundresdp"
-            android:layout_alignParentBottom="true"/>
+        <FrameLayout
+            android:id="@+id/remote_video_view_container"
+            android:layout_width="388dp"
+            android:layout_height="632dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="4dp"
+            android:layout_marginBottom="80dp"
+            android:background="@android:color/white" />
 
         <FrameLayout
-            android:id="@+id/rel_pub_container"
-            android:layout_width="@dimen/eightydp"
-            android:layout_height="@dimen/hundresdp"
-            android:layout_marginTop="@dimen/fivehundreddp"
-            android:layout_marginEnd="@dimen/threehundresdp"
-            android:layout_marginLeft="@dimen/threehundresdp"
-            android:background="@color/smallwindow">
+            android:id="@+id/local_video_view_container"
+            android:layout_width="160dp"
+            android:layout_height="200dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginEnd="@dimen/activity_horizontal_margin"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:background="@android:color/darker_gray" />
 
-        </FrameLayout>
     </RelativeLayout>
-
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -45,6 +51,17 @@
             android:src="@drawable/ic_call_end_black_24dp"
             android:scaleType="centerCrop"/>
 
+        <!--        <ImageView-->
+        <!--            android:visibility="gone"-->
+        <!--            android:id="@+id/img_exit"           -->
+        <!--            android:layout_width="@dimen/fiftydp"-->
+        <!--            android:layout_height="@dimen/fiftydp"-->
+        <!--            android:layout_toRightOf="@id/img_call"-->
+        <!--            android:layout_toEndOf="@id/img_call"-->
+        <!--            android:layout_marginLeft="@dimen/fiftydp"-->
+        <!--            android:layout_centerVertical="true"-->
+        <!--            android:src="@drawable/ic_camera_enhance_black_24dp"/>-->
+
         <ImageView
             android:id="@+id/img_cam"
             android:onClick="onClickCamera"
@@ -56,7 +73,7 @@
             android:layout_centerVertical="true"
 
             android:src="@drawable/ic_camera_enhance_black_24dp"
-          />
+            />
 
         <ImageView
             android:id="@+id/img_mute"
@@ -68,7 +85,6 @@
             android:layout_marginRight="@dimen/fiftydp"
             android:scaleType="centerCrop"
             android:src="@drawable/ic_mic_black_24dp"
-           />
+            />
     </RelativeLayout>
-
 </RelativeLayout>
