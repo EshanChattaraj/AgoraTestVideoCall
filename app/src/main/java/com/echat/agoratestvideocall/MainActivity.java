@@ -1,5 +1,7 @@
 package com.echat.agoratestvideocall;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.SurfaceView;
@@ -19,13 +21,12 @@ import io.agora.rtc.video.VideoEncoderConfiguration;
 
 public class MainActivity extends AppCompatActivity {
 
-    private boolean boolCallEnd;
-    private boolean boolMutes;
-    private ImageView btnCall;
-    private ImageView btnMute;
-    private ImageView btnSwitchCam;
+    private boolean boolCallEnd, boolMutes;
+    private ImageView btnCall, btnMute, btnSwitchCam, btnLeaveMeeting;
     private RtcEngine mRtcEngine;
     private IRtcEngineEventHandler mRtcEventHandler;
+    private FrameLayout localContainer, remoteContainer;
+    private SurfaceView surfacelocalView, surfaceRemoteView ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,7 +64,9 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-
+    private void joinChannel() {
+        mRtcEngine.joinChannel("00640d42e285267418394dc159415cfc050IABq3mrs38FnFBwhKNu9QN2dtSaulgn3dAzG0lwYnlQeW3OMUn4AAAAAEAC6jTl70SypXgEAAQC1LKle", "eshan", "Extra Optional Data", new Random().nextInt(10000000)+1); // if you do not specify the uid, Agora will assign one.
+    }
     private void setupVideoProfile() {
         mRtcEngine.enableVideo();
         mRtcEngine.setVideoProfile(Constants.VIDEO_PROFILE_360P, false);mRtcEngine.setVideoEncoderConfiguration(new VideoEncoderConfiguration(
@@ -74,28 +77,38 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setupLocalVideo() {
-        FrameLayout container = (FrameLayout) findViewById(R.id.local_video_view_container);
-        SurfaceView surfaceView = RtcEngine.CreateRendererView(getBaseContext());
-        surfaceView.setZOrderMediaOverlay(true);
-        container.addView(surfaceView);
-        mRtcEngine.setupLocalVideo(new VideoCanvas(surfaceView, VideoCanvas.RENDER_MODE_ADAPTIVE, 0));
+        surfacelocalView = RtcEngine.CreateRendererView(getBaseContext());
+
+        surfacelocalView.setZOrderMediaOverlay(true);
+        localContainer.addView(surfacelocalView);
+        mRtcEngine.setupLocalVideo(new VideoCanvas(surfacelocalView, VideoCanvas.RENDER_MODE_ADAPTIVE, 0));
     }
-    private void joinChannel() {
-        mRtcEngine.joinChannel("00640d42e285267418394dc159415cfc050IABq3mrs38FnFBwhKNu9QN2dtSaulgn3dAzG0lwYnlQeW3OMUn4AAAAAEAC6jTl70SypXgEAAQC1LKle", "eshan", "Extra Optional Data", new Random().nextInt(10000000)+1); // if you do not specify the uid, Agora will assign one.
-    }
+
 
     private void setupRemoteVideo(int uid) {
-        FrameLayout container = (FrameLayout) findViewById(R.id.remote_video_view_container);
-
-        if (container.getChildCount() >= 1) {
+        surfaceRemoteView = RtcEngine.CreateRendererView(getBaseContext());
+        if (remoteContainer.getChildCount() >= 1) {
             return;
         }
 
-        SurfaceView surfaceView = RtcEngine.CreateRendererView(getBaseContext());
-        container.addView(surfaceView);
-        mRtcEngine.setupRemoteVideo(new VideoCanvas(surfaceView, VideoCanvas.RENDER_MODE_ADAPTIVE, uid));
-        surfaceView.setTag(uid);
 
+        remoteContainer.addView(surfaceRemoteView);
+        mRtcEngine.setupRemoteVideo(new VideoCanvas(surfaceRemoteView, VideoCanvas.RENDER_MODE_ADAPTIVE, uid));
+        surfaceRemoteView.setTag(uid);
+
+    }
+
+    private void removeLocalVideo() {
+        if (surfacelocalView != null) {
+            localContainer.removeView(surfacelocalView);
+        }
+        surfacelocalView = null;
+    }
+    private void removeRemoteVideo() {
+        if (surfaceRemoteView != null) {
+            remoteContainer.removeView(surfaceRemoteView);
+        }
+        surfaceRemoteView = null;
     }
 
     @Override
@@ -105,11 +118,25 @@ public class MainActivity extends AppCompatActivity {
             leaveChannel();
         }
         RtcEngine.destroy();
+        mRtcEngine = null;
     }
 
 
     private void leaveChannel() {
         mRtcEngine.leaveChannel();
+    }
+    public void OnClickLeave(View view) {
+        new AlertDialog.Builder(this)
+                .setMessage("Are you sure you want to exit?")
+                .setCancelable(false)
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+//                        MainActivity.super.onBackPressed();
+                        finish();
+                    }
+                })
+                .setNegativeButton("No", null)
+                .show();
     }
 
     public void onCallClicked(View view) {
@@ -117,10 +144,12 @@ public class MainActivity extends AppCompatActivity {
             startCall();
             boolCallEnd = false;
             btnCall.setImageResource(R.drawable.ic_call_end_black_24dp);
+            btnLeaveMeeting.setVisibility(View.GONE);
         } else {
             endCall();
             boolCallEnd = true;
             btnCall.setImageResource(R.drawable.ic_video_call_black_24dp);
+            btnLeaveMeeting.setVisibility(View.VISIBLE);
         }
 
         showButtons(!boolCallEnd);
@@ -134,13 +163,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void endCall() {
-        FrameLayout container1 = (FrameLayout) findViewById(R.id.remote_video_view_container);
-        FrameLayout container2 = (FrameLayout) findViewById(R.id.local_video_view_container);
-        container1.removeView(RtcEngine.CreateRendererView(getBaseContext()));
-        container2.removeView(RtcEngine.CreateRendererView(getBaseContext()));
+        removeLocalVideo();
+        removeRemoteVideo();
         leaveChannel();
 //        RtcEngine.destroy();
     }
+
 
     public void onClickCamera(View view) {
         mRtcEngine.switchCamera();
@@ -161,5 +189,13 @@ public class MainActivity extends AppCompatActivity {
         btnCall = findViewById(R.id.img_call);
         btnMute = findViewById(R.id.img_mute);
         btnSwitchCam = findViewById(R.id.img_cam);
+        localContainer = findViewById(R.id.local_video_view_container);
+        remoteContainer = findViewById(R.id.remote_video_view_container);
+        btnLeaveMeeting = findViewById(R.id.img_leave);
+
+
+
     }
+
+
 }

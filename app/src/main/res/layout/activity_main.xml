@@ -74,6 +74,18 @@
 
             android:src="@drawable/ic_camera_enhance_black_24dp"
             />
+        <ImageView
+            android:visibility="gone"
+            android:id="@+id/img_leave"
+            android:onClick="OnClickLeave"
+            android:layout_width="@dimen/fiftydp"
+            android:layout_height="@dimen/fiftydp"
+            android:layout_toRightOf="@id/img_call"
+            android:layout_toEndOf="@id/img_call"
+            android:layout_marginLeft="@dimen/fiftydp"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_exit_to_app_red_24dp"
+            />
 
         <ImageView
             android:id="@+id/img_mute"
