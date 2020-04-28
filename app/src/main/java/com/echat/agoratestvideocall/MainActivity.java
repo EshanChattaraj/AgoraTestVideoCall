@@ -81,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
         mRtcEngine.setupLocalVideo(new VideoCanvas(surfaceView, VideoCanvas.RENDER_MODE_ADAPTIVE, 0));
     }
     private void joinChannel() {
-        mRtcEngine.joinChannel(null, "aye", "Extra Optional Data", new Random().nextInt(10000000)+1); // if you do not specify the uid, Agora will assign one.
+        mRtcEngine.joinChannel("00640d42e285267418394dc159415cfc050IABq3mrs38FnFBwhKNu9QN2dtSaulgn3dAzG0lwYnlQeW3OMUn4AAAAAEAC6jTl70SypXgEAAQC1LKle", "eshan", "Extra Optional Data", new Random().nextInt(10000000)+1); // if you do not specify the uid, Agora will assign one.
     }
 
     private void setupRemoteVideo(int uid) {
