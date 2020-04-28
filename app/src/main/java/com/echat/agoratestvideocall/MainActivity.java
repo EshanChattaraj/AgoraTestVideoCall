@@ -127,7 +127,7 @@ public class MainActivity extends AppCompatActivity {
     }
     public void OnClickLeave(View view) {
         new AlertDialog.Builder(this)
-                .setMessage("Are you sure you want to exit?")
+                .setMessage("Are you sure you want to Leave Meeting and Exit?")
                 .setCancelable(false)
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
