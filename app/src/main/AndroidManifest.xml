@@ -37,6 +37,7 @@
             android:screenOrientation="sensorPortrait"
             android:theme="@style/FullScreenVideo"
         />
+        <uses-library android:name="org.apache.http.legacy" android:required="false"/>
 
     </application>
 

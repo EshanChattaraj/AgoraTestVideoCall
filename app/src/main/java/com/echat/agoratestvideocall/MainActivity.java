@@ -8,9 +8,21 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.NetworkResponse;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+import com.google.android.material.snackbar.Snackbar;
 import java.util.Random;
 
 import io.agora.rtc.Constants;
@@ -18,6 +30,11 @@ import io.agora.rtc.IRtcEngineEventHandler;
 import io.agora.rtc.RtcEngine;
 import io.agora.rtc.video.VideoCanvas;
 import io.agora.rtc.video.VideoEncoderConfiguration;
+
+import com.echat.agoratestvideocall.adapter.Constant;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -27,19 +44,26 @@ public class MainActivity extends AppCompatActivity {
     private IRtcEngineEventHandler mRtcEventHandler;
     private FrameLayout localContainer, remoteContainer;
     private SurfaceView surfacelocalView, surfaceRemoteView ;
+    RelativeLayout relativeLayout;
+    RequestQueue requestQueue;
+    String getToken = "";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initcasting();
+        getTokenfromurl();
+
         mRtcEventHandler = new IRtcEngineEventHandler() {
             @Override
             public void onFirstRemoteVideoDecoded(final int uid, int width, int height, int elapsed) {
-                Log.i("uid video", uid + "");
+
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        Log.i("uid video", String.valueOf(uid));
                         setupRemoteVideo(uid);
                     }
                 });
@@ -47,8 +71,14 @@ public class MainActivity extends AppCompatActivity {
 
 
         };
-        initializeAgoraEngine();
 
+        if (!Constant.isNetworkAvailable(getApplicationContext()) == true) {
+            showSnackBar("OOPS! NO INTERNET " +
+                    "Please check your network connection. " +
+                    "Try Again");
+        } else {
+        initializeAgoraEngine();
+        }
     }
 
     private void initializeAgoraEngine() {
@@ -63,9 +93,40 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    private void getTokenfromurl(){
+
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, Constant.getToken,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONObject obj = new JSONObject(response);
+                            getToken = obj.getString("token");
+                            Log.i("getToken", getToken);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        //displaying the error in toast if occurrs
+                        Log.i("error.getMessage()", String.valueOf(error.getMessage()));
+                        Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+        //creating a request queue
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+
+        //adding the string request to request queue
+        requestQueue.add(stringRequest);
+    }
+
 
     private void joinChannel() {
-        mRtcEngine.joinChannel("00640d42e285267418394dc159415cfc050IABq3mrs38FnFBwhKNu9QN2dtSaulgn3dAzG0lwYnlQeW3OMUn4AAAAAEAC6jTl70SypXgEAAQC1LKle", "eshan", "Extra Optional Data", new Random().nextInt(10000000)+1); // if you do not specify the uid, Agora will assign one.
+        mRtcEngine.joinChannel(getToken, "eshan", "Extra Optional Data", new Random().nextInt(10000000)+1); // if you do not specify the uid, Agora will assign one.
     }
     private void setupVideoProfile() {
         mRtcEngine.enableVideo();
@@ -192,9 +253,23 @@ public class MainActivity extends AppCompatActivity {
         localContainer = findViewById(R.id.local_video_view_container);
         remoteContainer = findViewById(R.id.remote_video_view_container);
         btnLeaveMeeting = findViewById(R.id.img_leave);
+        relativeLayout = findViewById(R.id.relative_layout);
 
 
+    }
 
+    public void showSnackBar(String errors) {
+        Snackbar.make(relativeLayout, errors, Snackbar.LENGTH_INDEFINITE)
+                .setAction("CLOSE", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        moveTaskToBack(true);
+                        android.os.Process.killProcess(android.os.Process.myPid());
+                        System.exit(1);
+                    }
+                })
+                .setActionTextColor(getResources().getColor(android.R.color.holo_red_light))
+                .show();
     }
 
 
