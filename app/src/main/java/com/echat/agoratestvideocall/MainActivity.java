@@ -126,7 +126,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void joinChannel() {
-        mRtcEngine.joinChannel(getToken, "eshan", "Extra Optional Data", new Random().nextInt(10000000)+1); // if you do not specify the uid, Agora will assign one.
+        mRtcEngine.joinChannel("00640d42e285267418394dc159415cfc050IAD7amiE0aDsbJlxr7+RunhBFqtL20Lc+REJ931EKRsZK3OMUn4AAAAAEAC6jTl710SxXgEAAQC4RLFe", "eshan", "Extra Optional Data", new Random().nextInt(10000000)+1); // if you do not specify the uid, Agora will assign one.
     }
     private void setupVideoProfile() {
         mRtcEngine.enableVideo();
